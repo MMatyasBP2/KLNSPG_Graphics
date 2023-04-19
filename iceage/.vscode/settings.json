@@ -1,9 +1,0 @@
-{
-  "files.associations": {
-    "math.h": "c",
-    "freeglut.h": "c",
-    "camera.h": "c",
-    "scene.h": "c",
-    "glut.h": "c"
-  }
-}
