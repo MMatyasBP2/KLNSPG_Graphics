@@ -4,6 +4,10 @@
 #include <obj/load.h>
 #include <obj/draw.h>
 
+float waterPoints[45][45][3];
+int wiggleCount = 0;
+float hold;
+
 void init_scene(Scene* scene)
 {
     load_model(&(scene->firsthouse), "assets/models/house.obj");
@@ -16,6 +20,18 @@ void init_scene(Scene* scene)
     scene->porsche_texture_id = load_texture("assets/textures/car.png");
     scene->ground_texture_id = load_texture("assets/textures/ground.png");
     scene->help_texture_id = load_texture("assets/textures/help.jpg");
+
+    // init water points
+	int x, y;
+	for (x = 0; x < 45; x++)
+	{
+		for (y = 0; y < 45; y++)
+		{
+			waterPoints[x][y][0] = (x / 5.0f) - 4.5f;
+			waterPoints[x][y][1] = (y / 5.0f) - 4.5f;
+			waterPoints[x][y][2] = sin((((x / 5.0f) * 40.0f) / 360.0f) * 3.141592654 * 2.0f);
+		}
+	}
 
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
@@ -30,8 +46,8 @@ void init_scene(Scene* scene)
     scene->material.specular.blue = 0.0;
 
     scene->material.shininess = 0.0;
-
     scene->light = 1.0f;
+    scene->secondhousey = -17.0f;
 }
 
 void set_lighting(float x)
@@ -94,7 +110,7 @@ void render_scene(const Scene* scene)
     glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
     glScalef(0.04f, 0.04f, 0.04f);
     glRotated(90, 1, 0, 0);
-    glTranslatef(-100.0f, -17.0f, scene->secondhousey);
+    glTranslatef(-100.0f, scene->secondhousey, 100.0f);
     draw_model(&(scene->secondhouse));
     glPopMatrix();
 
@@ -133,6 +149,8 @@ void render_scene(const Scene* scene)
     glTranslatef(0, 0, 0);
     draw_model(&(scene->ground));
     glPopMatrix();
+
+    draw_water();
 }
 
 void help(GLuint texture)
@@ -182,4 +200,62 @@ void draw_origin()
     glVertex3f(0, 0, 1);
 
     glEnd();
+}
+
+void draw_water()
+{
+	int x, y;
+	float float_x, float_y, float_xb, float_yb;
+
+	glColor3f(0.0f, 0.0f, 1.0f);
+
+	glPushMatrix();
+	glDisable(GL_LIGHTING);
+	glTranslatef(0.0f, 0.0f, -0.5f);
+	glScalef(50.0f, 50.0f, 0.5f);
+
+	glBegin(GL_QUADS);
+	{
+		for (x = 0; x < 44; x++)
+		{
+			for (y = 0; y < 44; y++)
+			{
+				float_x = (x) / 44.0f;
+				float_y = (y) / 44.0f;
+				float_xb = (x + 1) / 44.0f;
+				float_yb = (y + 1) / 44.0f;
+
+				glTexCoord2f(float_x, float_y);
+				glVertex3f(waterPoints[x][y][0], waterPoints[x][y][1], waterPoints[x][y][2]);
+
+				glTexCoord2f(float_x, float_yb);
+				glVertex3f(waterPoints[x][y + 1][0], waterPoints[x][y + 1][1], waterPoints[x][y + 1][2]);
+
+				glTexCoord2f(float_xb, float_yb);
+				glVertex3f(waterPoints[x + 1][y + 1][0], waterPoints[x + 1][y + 1][1], waterPoints[x + 1][y + 1][2]);
+
+				glTexCoord2f(float_xb, float_y);
+				glVertex3f(waterPoints[x + 1][y][0], waterPoints[x + 1][y][1], waterPoints[x + 1][y][2]);
+			}
+		}
+	}
+	glEnd();
+
+	if (wiggleCount == 10)
+	{
+		for (y = 0; y < 45; y++)
+		{
+			hold = waterPoints[0][y][2];
+			for (x = 0; x < 44; x++)
+			{
+				waterPoints[x][y][2] = waterPoints[x + 1][y][2];
+			}
+			waterPoints[44][y][2] = hold;
+		}
+		wiggleCount = 0;
+	}
+	wiggleCount++;
+
+	glEnable(GL_LIGHTING);
+	glPopMatrix();
 }

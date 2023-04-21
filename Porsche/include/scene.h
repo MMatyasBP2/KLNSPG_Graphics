@@ -30,7 +30,6 @@ typedef struct Scene
     float secondhousey;
 } Scene;
 
-
 /**
  * Initialize the scene by loading models.
  */
@@ -65,5 +64,10 @@ void draw_origin();
  * Draw help with F1
 */
 void help(GLuint texture);
+
+/**
+ * Draw water
+*/
+void draw_water();
 
 #endif /* SCENE_H */
