@@ -134,6 +134,11 @@ int check_collisions(vec3 newposition)
 
     if (calc_collision(newposition, -3.569052, 5.748179, 2.5, 2.5) == 1)
         return 1;
+
+    if (calc_collision(newposition, -8.299263, 13.735351, 0.2f, 0.2f) == 1)
+	{
+		return 1;
+	}
  
     // No collision found
     return 0;
