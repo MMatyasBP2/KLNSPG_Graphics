@@ -14,6 +14,7 @@ typedef struct Camera
     vec3 rotation;
     vec3 speed;
     bool is_preview_visible;
+    int endgame;
 } Camera;
  
 /**
@@ -47,9 +48,11 @@ void set_camera_speed(Camera *camera, double speed);
 void set_camera_side_speed(Camera *camera, double speed);
  
 /* Main function to call collision checks*/
-int check_collisions(vec3 newPosition);
+int check_collisions(vec3 newPosition, Camera *camera);
  
 /* Function that calculates collision */
 int calc_collision(vec3 newPosition, float posX, float posY, float boxSizeX, float boxSizeY);
+
+void drawEnd();
  
 #endif /* CAMERA_H */

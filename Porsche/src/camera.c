@@ -1,7 +1,6 @@
 #include "camera.h"
- 
 #include <GL/gl.h>
- 
+#include <obj/load.h>
 #include <math.h>
  
 void init_camera(Camera *camera)
@@ -22,7 +21,7 @@ void init_camera(Camera *camera)
  
 void update_camera(Camera *camera, double time)
 {
-    printf("x: %f, y: %f", camera->position.x, camera->position.y);
+    printf("X: %f Y: %f\n", camera->position.x, camera->position.y);
 
     double angle;
     double side_angle;
@@ -36,11 +35,44 @@ void update_camera(Camera *camera, double time)
     newPosition.x += cos(side_angle) * camera->speed.x * time;
     newPosition.y += sin(side_angle) * camera->speed.x * time;
  
-    if (check_collisions(newPosition) == 0)
+    if (check_collisions(newPosition, camera) == 0)
     {
         camera->position.x = newPosition.x;
         camera->position.y = newPosition.y;
     }
+
+    if (camera->endgame == 1)
+        drawEnd();
+}
+
+void drawEnd()
+{
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, load_texture("assets/textures/help.jpg"));
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);
+    glVertex3d(-2, 1.5, -3);
+    glTexCoord2f(1, 0);
+    glVertex3d(2, 1.5, -3);
+    glTexCoord2f(1, 1);
+    glVertex3d(2, -1.5, -3);
+    glTexCoord2f(0, 1);
+    glVertex3d(-2, -1.5, -3);
+    glEnd();
+
+    glDisable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
 }
  
 void set_view(const Camera *camera)
@@ -116,14 +148,14 @@ void show_texture_preview()
     glEnable(GL_DEPTH_TEST);
 }
  
-int check_collisions(vec3 newposition)
+int check_collisions(vec3 newposition, Camera *camera)
 {
     /* map Y edges */
-    if ((newposition.y < -20) || (newposition.y > 20))
+    if ((newposition.y < -17.662912) || (newposition.y > 17.662912))
         return 1;
  
     /* map X edges */
-    if ((newposition.x < -20) || (newposition.x > 20))
+    if ((newposition.x < -17.662912) || (newposition.x > 17.487240))
         return 1;
  
     if (calc_collision(newposition, 5.223761, -3.462567, 2.5, 2.5) == 1)
@@ -137,6 +169,7 @@ int check_collisions(vec3 newposition)
 
     if (calc_collision(newposition, -8.299263, 13.735351, 0.2f, 0.2f) == 1)
 	{
+        camera->endgame = 1;
 		return 1;
 	}
  

@@ -48,6 +48,7 @@ void init_scene(Scene* scene)
     scene->material.shininess = 0.0;
     scene->light = 1.0f;
     scene->secondhousey = -17.0f;
+    scene->showhelp = 0;
 }
 
 void set_lighting(float x)
@@ -155,10 +156,7 @@ void render_scene(const Scene* scene)
 
 void help(GLuint texture)
 {
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -177,10 +175,7 @@ void help(GLuint texture)
     glVertex3d(-2, -1.5, -3);
     glEnd();
 
-    glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
 }
 
 void draw_origin()
@@ -208,10 +203,9 @@ void draw_water()
 	float float_x, float_y, float_xb, float_yb;
 
 	glColor3f(0.0f, 0.0f, 1.0f);
-
 	glPushMatrix();
 	glDisable(GL_LIGHTING);
-	glTranslatef(0.0f, 0.0f, -0.5f);
+    glTranslatef(-1.6f, 18.0f, -0.5f);
 	glScalef(50.0f, 50.0f, 0.5f);
 
 	glBegin(GL_QUADS);
