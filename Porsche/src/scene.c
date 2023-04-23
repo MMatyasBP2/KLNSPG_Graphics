@@ -18,7 +18,7 @@ void init_scene(Scene* scene)
     load_model(&(scene->ground), "assets/models/ground.obj");
     scene->house_texture_id = load_texture("assets/textures/house.jpg");
     scene->porsche_texture_id = load_texture("assets/textures/car.png");
-    scene->ground_texture_id = load_texture("assets/textures/ground.png");
+    scene->ground_texture_id = load_texture("assets/textures/ground.webp");
 
     // init water points
 	int x, y;
@@ -180,7 +180,6 @@ void help()
 void drawEnd()
 {
     glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -197,7 +196,6 @@ void drawEnd()
     glTexCoord2f(0, 1);
     glVertex3d(-2, -1.5, -3);
     glEnd();
-    glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
 

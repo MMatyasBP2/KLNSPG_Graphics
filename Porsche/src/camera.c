@@ -22,8 +22,6 @@ void init_camera(Camera *camera)
  
 void update_camera(Camera *camera, double time)
 {
-    printf("X: %f Y: %f\n", camera->position.x, camera->position.y);
-
     double angle;
     double side_angle;
  
