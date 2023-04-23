@@ -1,6 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+
 /**
  * GLSL-like three dimensional vector
  */

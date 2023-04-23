@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "texture.h"
 #include <obj/model.h>
+#include <math.h>
 
 #define NUM_RAINDROPS 1000
 
@@ -22,8 +23,6 @@ typedef struct Scene
 
     Model ground;
     GLuint ground_texture_id;
-
-    GLuint help_texture_id;
     
     float light;
     int showhelp;
@@ -63,7 +62,9 @@ void draw_origin();
 /**
  * Draw help with F1
 */
-void help(GLuint texture);
+void help();
+
+void drawEnd();
 
 /**
  * Draw water

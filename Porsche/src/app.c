@@ -216,7 +216,7 @@ void render_app(App* app)
         show_texture_preview();
 
     if (app->scene.showhelp == 1)
-        help(app->scene.help_texture_id);
+        help();
 
     SDL_GL_SwapWindow(app->window);
 }

@@ -2,6 +2,7 @@
 #define CAMERA_H
  
 #include "utils.h"
+#include "scene.h"
  
 #include <stdbool.h>
  
@@ -52,7 +53,5 @@ int check_collisions(vec3 newPosition, Camera *camera);
  
 /* Function that calculates collision */
 int calc_collision(vec3 newPosition, float posX, float posY, float boxSizeX, float boxSizeY);
-
-void drawEnd();
  
 #endif /* CAMERA_H */

@@ -19,7 +19,6 @@ void init_scene(Scene* scene)
     scene->house_texture_id = load_texture("assets/textures/house.jpg");
     scene->porsche_texture_id = load_texture("assets/textures/car.png");
     scene->ground_texture_id = load_texture("assets/textures/ground.png");
-    scene->help_texture_id = load_texture("assets/textures/help.jpg");
 
     // init water points
 	int x, y;
@@ -154,15 +153,15 @@ void render_scene(const Scene* scene)
     draw_water();
 }
 
-void help(GLuint texture)
+void help()
 {
     glDisable(GL_DEPTH_TEST);
-
+    glDisable(GL_LIGHTING);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
     glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, texture);
+    glBindTexture(GL_TEXTURE_2D, load_texture("assets/textures/help.jpg"));
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
@@ -174,7 +173,31 @@ void help(GLuint texture)
     glTexCoord2f(0, 1);
     glVertex3d(-2, -1.5, -3);
     glEnd();
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+}
 
+void drawEnd()
+{
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glColor3f(1, 1, 1);
+    glBindTexture(GL_TEXTURE_2D, load_texture("assets/textures/help.jpg"));
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0);
+    glVertex3d(-2, 1.5, -3);
+    glTexCoord2f(1, 0);
+    glVertex3d(2, 1.5, -3);
+    glTexCoord2f(1, 1);
+    glVertex3d(2, -1.5, -3);
+    glTexCoord2f(0, 1);
+    glVertex3d(-2, -1.5, -3);
+    glEnd();
+    glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -205,7 +228,7 @@ void draw_water()
 	glColor3f(0.0f, 0.0f, 1.0f);
 	glPushMatrix();
 	glDisable(GL_LIGHTING);
-    glTranslatef(-1.6f, 18.0f, -0.5f);
+    glTranslatef(0.0f, 0.0f, -0.5f);
 	glScalef(50.0f, 50.0f, 0.5f);
 
 	glBegin(GL_QUADS);

@@ -17,6 +17,7 @@ void init_camera(Camera *camera)
     camera->speed.z = 0.0;
  
     camera->is_preview_visible = false;
+    camera->endgame = 0;
 }
  
 void update_camera(Camera *camera, double time)
@@ -43,36 +44,6 @@ void update_camera(Camera *camera, double time)
 
     if (camera->endgame == 1)
         drawEnd();
-}
-
-void drawEnd()
-{
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_LIGHTING);
-    glDisable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, load_texture("assets/textures/help.jpg"));
-
-    glBegin(GL_QUADS);
-    glTexCoord2f(0, 0);
-    glVertex3d(-2, 1.5, -3);
-    glTexCoord2f(1, 0);
-    glVertex3d(2, 1.5, -3);
-    glTexCoord2f(1, 1);
-    glVertex3d(2, -1.5, -3);
-    glTexCoord2f(0, 1);
-    glVertex3d(-2, -1.5, -3);
-    glEnd();
-
-    glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
 }
  
 void set_view(const Camera *camera)
@@ -150,11 +121,11 @@ void show_texture_preview()
  
 int check_collisions(vec3 newposition, Camera *camera)
 {
-    /* map Y edges */
+    /* Map Y edges */
     if ((newposition.y < -17.662912) || (newposition.y > 17.662912))
         return 1;
  
-    /* map X edges */
+    /* Map X edges */
     if ((newposition.x < -17.662912) || (newposition.x > 17.487240))
         return 1;
  
@@ -173,7 +144,6 @@ int check_collisions(vec3 newposition, Camera *camera)
 		return 1;
 	}
  
-    // No collision found
     return 0;
 }
  
