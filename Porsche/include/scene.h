@@ -27,6 +27,8 @@ typedef struct Scene
     float light;
     int showhelp;
     float secondhousey;
+    int endgame;
+    int enablemovement;
 } Scene;
 
 /**

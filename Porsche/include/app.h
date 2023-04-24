@@ -54,4 +54,6 @@ void render_app(App* app);
  */
 void destroy_app(App* app);
 
+int calc_collision(Camera *camera, float posX, float posY, float boxSizeX, float boxSizeY);
+
 #endif /* APP_H */

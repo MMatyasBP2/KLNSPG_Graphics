@@ -48,6 +48,8 @@ void init_scene(Scene* scene)
     scene->light = 1.0f;
     scene->secondhousey = -17.0f;
     scene->showhelp = 0;
+    scene->endgame = 0;
+    scene->enablemovement = 1;
 }
 
 void set_lighting(float x)
@@ -96,6 +98,7 @@ void update_scene(Scene* scene)
 
 void render_scene(const Scene* scene)
 {
+    glEnable(GL_FOG);
     // firsthouse
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
@@ -137,7 +140,7 @@ void render_scene(const Scene* scene)
     glBindTexture(GL_TEXTURE_2D, scene->porsche_texture_id);
     glScalef(0.7f, 0.7f, 0.7f);
     glRotated(90.0f, 1.0f, 0.0f, 0.0f);
-    glTranslatef(-12.0f, 0.6f, -20.0f);
+    glTranslatef(-8.0f, 0.58f, 7.0f);
     draw_model(&(scene->porsche));
     glPopMatrix();
 
@@ -151,12 +154,16 @@ void render_scene(const Scene* scene)
     glPopMatrix();
 
     draw_water();
+
+    if (scene->endgame == 1)
+        drawEnd();
 }
 
 void help()
 {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
+    glDisable(GL_FOG);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -173,6 +180,7 @@ void help()
     glTexCoord2f(0, 1);
     glVertex3d(-2, -1.5, -3);
     glEnd();
+    glEnable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
@@ -180,6 +188,7 @@ void help()
 void drawEnd()
 {
     glDisable(GL_DEPTH_TEST);
+    glDisable(GL_FOG);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -196,6 +205,7 @@ void drawEnd()
     glTexCoord2f(0, 1);
     glVertex3d(-2, -1.5, -3);
     glEnd();
+    glEnable(GL_FOG);
     glEnable(GL_DEPTH_TEST);
 }
 

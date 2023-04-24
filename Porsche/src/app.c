@@ -113,16 +113,20 @@ void handle_app_events(App* app)
                 app->is_running = false;
                 break;
             case SDL_SCANCODE_W:
-                set_camera_speed(&(app->camera), 1);
+                if (app->scene.enablemovement == 1)
+                    set_camera_speed(&(app->camera), 1);
                 break;
             case SDL_SCANCODE_S:
-                set_camera_speed(&(app->camera), -1);
+                if (app->scene.enablemovement == 1)
+                    set_camera_speed(&(app->camera), -1);
                 break;
             case SDL_SCANCODE_A:
-                set_camera_side_speed(&(app->camera), 1);
+                if (app->scene.enablemovement == 1)
+                    set_camera_side_speed(&(app->camera), 1);
                 break;
             case SDL_SCANCODE_D:
-                set_camera_side_speed(&(app->camera), -1);
+                if (app->scene.enablemovement == 1)
+                    set_camera_side_speed(&(app->camera), -1);
                 break;
             case SDL_SCANCODE_KP_PLUS:
                 app->scene.light += 0.1f;
@@ -170,12 +174,15 @@ void handle_app_events(App* app)
             is_mouse_down = true;
             break;
         case SDL_MOUSEMOTION:
-            SDL_GetMouseState(&x, &y);
-            if (is_mouse_down) {
-                rotate_camera(&(app->camera), mouse_x - x, mouse_y - y);
+            if (app->scene.enablemovement == 1)
+            {
+                SDL_GetMouseState(&x, &y);
+                if (is_mouse_down) {
+                    rotate_camera(&(app->camera), mouse_x - x, mouse_y - y);
+                }
+                mouse_x = x;
+                mouse_y = y;
             }
-            mouse_x = x;
-            mouse_y = y;
             break;
         case SDL_MOUSEBUTTONUP:
             is_mouse_down = false;
@@ -200,6 +207,47 @@ void update_app(App* app)
 
     update_camera(&(app->camera), elapsed_time);
     update_scene(&(app->scene));
+
+    if (app->camera.position.x < -17.662912 || app->camera.position.x > 17.487240)
+        app->camera.position.x -= 0.2;
+
+    if ((app->camera.position.y < -17.662912) || (app->camera.position.y > 17.662912))
+        app->camera.position.y -= 0.2;
+
+    if (calc_collision(&(app->camera), 5.223761, -3.462567, 2.5, 2.5) == 1)
+    {
+        app->camera.position.x -= 0.2;
+        app->camera.position.y -= 0.2;
+    }
+ 
+    if (calc_collision(&(app->camera), 5.355745, 5.742432, 2.6, 2.6) == 1)
+    {
+        app->camera.position.x -= 0.2;
+        app->camera.position.y -= 0.2;
+    }
+
+    if (calc_collision(&(app->camera), -3.569052, 5.748179, 2.5, 2.5) == 1)
+    {
+        app->camera.position.x -= 0.2;
+        app->camera.position.y -= 0.2;
+    }
+
+    if (calc_collision(&(app->camera), -5.083924, -4.747217, 0.2f, 0.2f) == 1)
+	{
+        app->camera.position.x -= 0.2;
+        app->camera.position.y -= 0.2;
+        app->scene.endgame = 1;
+        app->scene.enablemovement = 0;
+	}
+}
+
+int calc_collision(Camera *camera, float posX, float posY, float boxSizeX, float boxSizeY)
+{
+ 
+    if ((camera->position.x > posX - boxSizeX) && (camera->position.x < posX + boxSizeX))
+        if ((camera->position.y > posY - boxSizeY) && (camera->position.y < posY + boxSizeY))
+            return 1;
+    return 0;
 }
 
 void render_app(App* app)

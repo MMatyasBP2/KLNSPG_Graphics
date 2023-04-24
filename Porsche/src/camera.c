@@ -17,7 +17,6 @@ void init_camera(Camera *camera)
     camera->speed.z = 0.0;
  
     camera->is_preview_visible = false;
-    camera->endgame = 0;
 }
  
 void update_camera(Camera *camera, double time)
@@ -28,20 +27,11 @@ void update_camera(Camera *camera, double time)
     angle = degree_to_radian(camera->rotation.z);
     side_angle = degree_to_radian(camera->rotation.z + 90.0);
  
-    vec3 newPosition;
-    newPosition.x = camera->position.x + cos(angle) * camera->speed.y * time;
-    newPosition.y = camera->position.y + sin(angle) * camera->speed.y * time;
-    newPosition.x += cos(side_angle) * camera->speed.x * time;
-    newPosition.y += sin(side_angle) * camera->speed.x * time;
+    camera->position.x += cos(angle) * camera->speed.y * time;
+    camera->position.y += sin(angle) * camera->speed.y * time;
+    camera->position.x += cos(side_angle) * camera->speed.x * time;
+    camera->position.y += sin(side_angle) * camera->speed.x * time;
  
-    if (check_collisions(newPosition, camera) == 0)
-    {
-        camera->position.x = newPosition.x;
-        camera->position.y = newPosition.y;
-    }
-
-    if (camera->endgame == 1)
-        drawEnd();
 }
  
 void set_view(const Camera *camera)
@@ -115,41 +105,4 @@ void show_texture_preview()
     glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
-}
- 
-int check_collisions(vec3 newposition, Camera *camera)
-{
-    /* Map Y edges */
-    if ((newposition.y < -17.662912) || (newposition.y > 17.662912))
-        return 1;
- 
-    /* Map X edges */
-    if ((newposition.x < -17.662912) || (newposition.x > 17.487240))
-        return 1;
- 
-    if (calc_collision(newposition, 5.223761, -3.462567, 2.5, 2.5) == 1)
-        return 1;
- 
-    if (calc_collision(newposition, 5.355745, 5.742432, 2.6, 2.6) == 1)
-        return 1;
-
-    if (calc_collision(newposition, -3.569052, 5.748179, 2.5, 2.5) == 1)
-        return 1;
-
-    if (calc_collision(newposition, -8.299263, 13.735351, 0.2f, 0.2f) == 1)
-	{
-        camera->endgame = 1;
-		return 1;
-	}
- 
-    return 0;
-}
- 
-int calc_collision(vec3 newposition, float posX, float posY, float boxSizeX, float boxSizeY)
-{
- 
-    if ((newposition.x > posX - boxSizeX) && (newposition.x < posX + boxSizeX))
-        if ((newposition.y > posY - boxSizeY) && (newposition.y < posY + boxSizeY))
-            return 1;
-    return 0;
 }
