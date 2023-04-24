@@ -193,7 +193,7 @@ void drawEnd()
     glLoadIdentity();
 
     glColor3f(1, 1, 1);
-    glBindTexture(GL_TEXTURE_2D, load_texture("assets/textures/help.jpg"));
+    glBindTexture(GL_TEXTURE_2D, load_texture("assets/textures/end.jpg"));
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
