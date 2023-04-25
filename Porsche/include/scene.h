@@ -29,6 +29,7 @@ typedef struct Scene
     float secondhousey;
     int endgame;
     int enablemovement;
+    int fogenable;
 } Scene;
 
 /**
@@ -64,9 +65,9 @@ void draw_origin();
 /**
  * Draw help with F1
 */
-void help();
+void help(Scene *scene);
 
-void drawEnd();
+void drawEnd(Scene *scene);
 
 /**
  * Draw water

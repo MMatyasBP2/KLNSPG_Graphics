@@ -50,6 +50,7 @@ void init_scene(Scene* scene)
     scene->showhelp = 0;
     scene->endgame = 0;
     scene->enablemovement = 1;
+    scene->fogenable = 0;
 }
 
 void set_lighting(float x)
@@ -98,7 +99,6 @@ void update_scene(Scene* scene)
 
 void render_scene(const Scene* scene)
 {
-    glEnable(GL_FOG);
     // firsthouse
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
@@ -156,10 +156,10 @@ void render_scene(const Scene* scene)
     draw_water();
 
     if (scene->endgame == 1)
-        drawEnd();
+        drawEnd(scene);
 }
 
-void help()
+void help(Scene *scene)
 {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
@@ -180,12 +180,13 @@ void help()
     glTexCoord2f(0, 1);
     glVertex3d(-2, -1.5, -3);
     glEnd();
-    glEnable(GL_FOG);
+    if (scene->fogenable == 1)
+        glEnable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
 }
 
-void drawEnd()
+void drawEnd(Scene *scene)
 {
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_FOG);
@@ -205,7 +206,8 @@ void drawEnd()
     glTexCoord2f(0, 1);
     glVertex3d(-2, -1.5, -3);
     glEnd();
-    glEnable(GL_FOG);
+    if (scene->fogenable == 1)
+        glEnable(GL_FOG);
     glEnable(GL_DEPTH_TEST);
 }
 

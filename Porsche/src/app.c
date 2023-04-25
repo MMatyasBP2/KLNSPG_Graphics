@@ -152,6 +152,18 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_2:
                 app->scene.secondhousey -= 0.1f;
                 break;
+            case SDL_SCANCODE_3:
+                if (app->scene.fogenable == 0)
+                {
+                    glEnable(GL_FOG);
+                    app->scene.fogenable = 1;
+                }
+                else
+                {
+                    glDisable(GL_FOG);
+                    app->scene.fogenable = 0;
+                }
+                break;
             default:
                 break;
             }
@@ -232,7 +244,7 @@ void update_app(App* app)
         app->camera.position.y -= 0.2;
     }
 
-    if (calc_collision(&(app->camera), -5.083924, -4.747217, 0.2f, 0.2f) == 1)
+    if (calc_collision(&(app->camera), -5.083924, -4.747217, 0.3f, 0.3f) == 1)
 	{
         app->camera.position.x -= 0.2;
         app->camera.position.y -= 0.2;
@@ -264,7 +276,7 @@ void render_app(App* app)
         show_texture_preview();
 
     if (app->scene.showhelp == 1)
-        help();
+        help(&(app->scene));
 
     SDL_GL_SwapWindow(app->window);
 }
