@@ -156,7 +156,7 @@ void handle_app_events(App* app)
                 if (app->scene.fogenable == 0)
                 {
                     glEnable(GL_FOG);
-                    glFogf(GL_FOG_DENSITY, 0.25);
+                    glFogf(GL_FOG_DENSITY, 0.2);
                     app->scene.fogenable = 1;
                 }
                 else
