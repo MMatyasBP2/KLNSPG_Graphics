@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "scene.h"
+#include "water.h"
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
@@ -17,6 +18,7 @@ typedef struct App
     double uptime;
     Camera camera;
     Scene scene;
+    Water water;
 } App;
 
 /**

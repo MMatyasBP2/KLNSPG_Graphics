@@ -219,7 +219,8 @@ void update_app(App* app)
     app->uptime = current_time;
 
     update_camera(&(app->camera), elapsed_time);
-    update_scene(&(app->scene));
+    update_scene(&(app->scene), elapsed_time);
+    update_water(&(app->water), elapsed_time);
 
     if ((app->camera.position.x < -17.662912) || (app->camera.position.x > 17.487240))
         app->camera.position.x -= 0.2;

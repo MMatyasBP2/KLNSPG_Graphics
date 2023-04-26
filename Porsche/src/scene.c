@@ -15,6 +15,7 @@ void init_scene(Scene* scene)
     scene->house_texture_id = load_texture("assets/textures/house.jpg");
     scene->porsche_texture_id = load_texture("assets/textures/car.png");
     scene->ground_texture_id = load_texture("assets/textures/ground.webp");
+    scene->water_texture_id = load_texture("assets/textures/water.jpg");
 
     init_water(&(scene->water));
 
@@ -78,9 +79,10 @@ void set_material(const Material* material)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material->shininess));
 }
 
-void update_scene(Scene* scene)
+void update_scene(Scene* scene, double elapsed_time)
 {
     set_lighting(scene->light);
+    update_water(&(scene->water), elapsed_time);
 }
 
 void render_scene(const Scene* scene)
@@ -139,7 +141,8 @@ void render_scene(const Scene* scene)
     draw_model(&(scene->ground));
     glPopMatrix();
 
-    render_water();
+    glBindTexture(GL_TEXTURE_2D, scene->water_texture_id);
+    render_water(&(scene->water));
 
     if (scene->endgame == 1)
         drawEnd(scene);

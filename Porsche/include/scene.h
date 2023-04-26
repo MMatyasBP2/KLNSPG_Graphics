@@ -26,6 +26,7 @@ typedef struct Scene
     GLuint ground_texture_id;
     
     Water water;
+    GLuint water_texture_id;
 
     float light;
     int showhelp;
@@ -53,7 +54,7 @@ void set_material(const Material* material);
 /**
  * Update the scene.
  */
-void update_scene(Scene* scene);
+void update_scene(Scene* scene, double elapsed_time);
 
 /**
  * Render the scene objects.
