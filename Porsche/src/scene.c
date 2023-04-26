@@ -20,7 +20,6 @@ void init_scene(Scene* scene)
     scene->porsche_texture_id = load_texture("assets/textures/car.png");
     scene->ground_texture_id = load_texture("assets/textures/ground.webp");
 
-    // init water points
 	int x, y;
 	for (x = 0; x < 45; x++)
 	{

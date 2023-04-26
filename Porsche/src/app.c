@@ -156,6 +156,7 @@ void handle_app_events(App* app)
                 if (app->scene.fogenable == 0)
                 {
                     glEnable(GL_FOG);
+                    glFogf(GL_FOG_DENSITY, 0.25);
                     app->scene.fogenable = 1;
                 }
                 else
@@ -220,7 +221,7 @@ void update_app(App* app)
     update_camera(&(app->camera), elapsed_time);
     update_scene(&(app->scene));
 
-    if (app->camera.position.x < -17.662912 || app->camera.position.x > 17.487240)
+    if ((app->camera.position.x < -17.662912) || (app->camera.position.x > 17.487240))
         app->camera.position.x -= 0.2;
 
     if ((app->camera.position.y < -17.662912) || (app->camera.position.y > 17.662912))
