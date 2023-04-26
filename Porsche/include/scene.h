@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "texture.h"
+#include "water.h"
 #include <obj/model.h>
 #include <math.h>
 
@@ -24,6 +25,8 @@ typedef struct Scene
     Model ground;
     GLuint ground_texture_id;
     
+    Water water;
+
     float light;
     int showhelp;
     float secondhousey;
