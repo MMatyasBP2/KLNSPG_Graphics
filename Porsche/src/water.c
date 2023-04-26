@@ -9,8 +9,8 @@ void init_water(Water *water)
     {
         for (y = 0; y < 45; y++)
         {
-            water->waterPoints[x][y][0] = (x - 22) * 100;
-            water->waterPoints[x][y][1] = (y - 22) * 100;
+            water->waterPoints[x][y][0] = x - 22;
+            water->waterPoints[x][y][1] = y - 22;
             water->waterPoints[x][y][2] = 0;
         }
     }
