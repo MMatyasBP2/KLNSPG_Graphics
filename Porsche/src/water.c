@@ -28,29 +28,14 @@ void update_water(Water *water, double elapsed_time)
     for (x = 0; x < 45; x++)
     {
         for (y = 0; y < 45; y++)
-        {
-            water->waterPoints[x][y][2] = water->amplitude * sin((x / 5.0f) * 2.0f * 3.141592654 + water->delta);
-        }
+            water->waterPoints[x][y][2] = water->amplitude * sin((x / 5.0f) * 2.0f * M_PI + water->delta);
     }
 }
 
 void render_water(Water *water)
 {
-    glPushMatrix();
-
-    GLfloat water_mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-    GLfloat water_mat_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-    GLfloat water_mat_specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-    GLfloat water_mat_shininess[] = { 50.0 };
-
-    glMaterialfv(GL_FRONT, GL_AMBIENT, water_mat_ambient);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, water_mat_diffuse);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, water_mat_specular);
-    glMaterialfv(GL_FRONT, GL_SHININESS, water_mat_shininess);
-
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glTranslatef(0.0f, 0.0f, -0.5f);
-
+    set_water_settings();
+    
     int x, y;
     glBegin(GL_QUADS);
     for (x = 0; x < 44; x++)
@@ -73,6 +58,20 @@ void render_water(Water *water)
         }
     }
     glEnd();
+}
 
-    glPopMatrix();
+void set_water_settings()
+{
+    GLfloat water_mat_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat water_mat_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
+    GLfloat water_mat_specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    GLfloat water_mat_shininess[] = { 50.0 };
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, water_mat_ambient);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, water_mat_diffuse);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, water_mat_specular);
+    glMaterialfv(GL_FRONT, GL_SHININESS, water_mat_shininess);
+
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glTranslatef(0.0f, 0.0f, -0.5f);
 }

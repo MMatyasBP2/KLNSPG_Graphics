@@ -141,8 +141,10 @@ void render_scene(const Scene* scene)
     draw_model(&(scene->ground));
     glPopMatrix();
 
+    glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->water_texture_id);
     render_water(&(scene->water));
+    glPopMatrix();
 
     if (scene->endgame == 1)
         drawEnd(scene);

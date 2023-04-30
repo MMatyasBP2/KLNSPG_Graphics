@@ -7,8 +7,6 @@
 #include <obj/model.h>
 #include <math.h>
 
-#define NUM_RAINDROPS 1000
-
 typedef struct Scene
 {
     Material material;
