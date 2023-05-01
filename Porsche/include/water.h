@@ -12,5 +12,6 @@ typedef struct Water
 void init_water(Water *water);
 void update_water(Water *water, double elapsed_time);
 void render_water(Water *water);
+void set_water_settings();
 
 #endif
