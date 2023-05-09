@@ -143,6 +143,7 @@ void render_scene(const Scene* scene)
 
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->water_texture_id);
+    glTranslatef(0.0f, 0.0f, -0.5f);
     render_water(&(scene->water));
     glPopMatrix();
 

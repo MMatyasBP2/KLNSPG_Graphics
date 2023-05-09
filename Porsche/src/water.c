@@ -71,7 +71,4 @@ void set_water_settings()
     glMaterialfv(GL_FRONT, GL_DIFFUSE, water_mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR, water_mat_specular);
     glMaterialfv(GL_FRONT, GL_SHININESS, water_mat_shininess);
-
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glTranslatef(0.0f, 0.0f, -0.5f);
 }
