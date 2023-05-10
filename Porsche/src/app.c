@@ -164,10 +164,7 @@ void handle_app_events(App* app)
                     glDisable(GL_FOG);
                     app->scene.fogenable = 0;
                 }
-                app->scene.fogposition += 0.02f * app->scene.fogdirection; // Lassabb mozgás: csökkentett érték (0.02f)
-
-                // Ha eléri a köd a felső vagy az alsó határt, változtassuk meg az irányt
-                // Magasabb határérték: 20.0f (az eredeti 10.0f helyett)
+                app->scene.fogposition += 0.02f * app->scene.fogdirection;
                 if (app->scene.fogposition >= 20.0f || app->scene.fogposition <= -20.0f)
                 {
                     app->scene.fogdirection *= -1.0f;
