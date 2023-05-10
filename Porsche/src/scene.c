@@ -89,9 +89,6 @@ void update_scene(Scene* scene, double elapsed_time)
 
 void render_scene(const Scene* scene)
 {
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
     // firsthouse
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
@@ -154,9 +151,6 @@ void render_scene(const Scene* scene)
 
     if (scene->endgame == 1)
         drawEnd(scene);
-
-    glDisable(GL_LIGHT0);
-    glDisable(GL_LIGHTING);
 }
 
 void help(Scene *scene)
