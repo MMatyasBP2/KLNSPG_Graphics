@@ -19,6 +19,7 @@ typedef struct App
     Camera camera;
     Scene scene;
     Water water;
+    int housemovingup;
 } App;
 
 /**
