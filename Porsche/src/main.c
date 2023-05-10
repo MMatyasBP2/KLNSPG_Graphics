@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     while (app.is_running) {
         handle_app_events(&app);
 
-        if (app.house_state == HOUSE_MOVING_UP && app.scene.secondhousey < -0.09f)
+        if (app.house_state == HOUSE_MOVING_UP && app.scene.secondhousey < 15.0f)
             app.scene.secondhousey += 0.1f;
         else if (app.house_state == HOUSE_MOVING_UP)
             app.house_state = HOUSE_STATIONARY;
