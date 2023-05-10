@@ -164,13 +164,20 @@ void handle_app_events(App* app)
                     glDisable(GL_FOG);
                     app->scene.fogenable = 0;
                 }
+                app->scene.fogposition += 0.02f * app->scene.fogdirection; // Lassabb mozgás: csökkentett érték (0.02f)
 
-                app->scene.fogposition -= 0.2f; // Ez az érték állítja be, hogy milyen gyorsan mozog a köd lefelé (nagyobb érték)
+                // Ha eléri a köd a felső vagy az alsó határt, változtassuk meg az irányt
+                // Magasabb határérték: 20.0f (az eredeti 10.0f helyett)
+                if (app->scene.fogposition >= 20.0f || app->scene.fogposition <= -20.0f)
+                {
+                    app->scene.fogdirection *= -1.0f;
+                }
+
                 GLfloat fogColor[] = {0.5f, 0.5f, 0.5f, 1.0f};
                 glFogfv(GL_FOG_COLOR, fogColor);
                 glFogi(GL_FOG_MODE, GL_LINEAR);
                 glFogf(GL_FOG_START, app->scene.fogposition);
-                glFogf(GL_FOG_END, app->scene.fogposition + 30.0f); // Az érték növelése nagyobb ködterületet eredményez
+                glFogf(GL_FOG_END, app->scene.fogposition + 10.0f);
                 break;
             default:
                 break;

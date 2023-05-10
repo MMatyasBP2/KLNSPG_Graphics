@@ -39,6 +39,7 @@ void init_scene(Scene* scene)
     scene->enablemovement = 1;
     scene->fogenable = 0;
     scene->fogposition = 0.0f;
+    scene->fogdirection = 1.0f;
 }
 
 void set_lighting(float x)
