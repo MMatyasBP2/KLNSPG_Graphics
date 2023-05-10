@@ -42,7 +42,7 @@ void init_scene(Scene* scene)
 
 void set_lighting(float x)
 {
-    float ambient_light[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    float ambient_light[] = { x, x, x, 1.0f };
     float diffuse_light[] = { x, x, x, 1.0f };
     float specular_light[] = { 0.0f, 0.0f, 0.0f, 1.0f };
     float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
