@@ -164,6 +164,7 @@ void handle_app_events(App* app)
                     glDisable(GL_FOG);
                     app->scene.fogenable = 0;
                 }
+                
                 app->scene.fogposition += 0.02f * app->scene.fogdirection;
                 if (app->scene.fogposition >= 20.0f || app->scene.fogposition <= -20.0f)
                 {
