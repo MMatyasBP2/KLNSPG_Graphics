@@ -13,8 +13,16 @@ int main(int argc, char* argv[])
     while (app.is_running) {
         handle_app_events(&app);
 
-        if (app.housemovingup && app.scene.secondhousey > -20.0f)
+        if (app.house_state == HOUSE_MOVING_UP && app.scene.secondhousey < -0.09f)
             app.scene.secondhousey += 0.1f;
+        else if (app.house_state == HOUSE_MOVING_UP)
+            app.house_state = HOUSE_STATIONARY;
+    
+
+        if (app.house_state == HOUSE_MOVING_DOWN && app.scene.secondhousey > -17.0f)
+            app.scene.secondhousey -= 0.1f;
+        else if (app.house_state == HOUSE_MOVING_DOWN)
+            app.house_state = HOUSE_STATIONARY;
 
         update_app(&app);
         render_app(&app);

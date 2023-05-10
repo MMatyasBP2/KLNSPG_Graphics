@@ -43,7 +43,7 @@ void init_app(App* app, int width, int height)
     init_scene(&(app->scene));
 
     app->is_running = true;
-    app->housemovingup = 0;
+    app->house_state = HOUSE_STATIONARY;
 }
 
 void init_opengl()
@@ -148,11 +148,10 @@ void handle_app_events(App* app)
                 }
                 break;
             case SDL_SCANCODE_1:
-                app->housemovingup = 1;
+                app->house_state = HOUSE_MOVING_UP;
                 break;
             case SDL_SCANCODE_2:
-                app->scene.secondhousey = -17.0f;
-                app->housemovingup = 0;
+                app->house_state = HOUSE_MOVING_DOWN;
                 break;
             case SDL_SCANCODE_3:
                 if (app->scene.fogenable == 0)

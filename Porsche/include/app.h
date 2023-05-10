@@ -10,6 +10,14 @@
 #define VIEWPORT_RATIO (16.0 / 9.0)
 #define VIEWPORT_ASPECT 100.0
 
+typedef enum
+{
+    HOUSE_STATIONARY,
+    HOUSE_MOVING_UP,
+    HOUSE_MOVING_DOWN
+} HouseState;
+
+
 typedef struct App
 {
     SDL_Window* window;
@@ -19,7 +27,7 @@ typedef struct App
     Camera camera;
     Scene scene;
     Water water;
-    int housemovingup;
+    HouseState house_state;
 } App;
 
 /**
