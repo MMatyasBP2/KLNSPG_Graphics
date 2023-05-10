@@ -32,6 +32,7 @@ typedef struct Scene
     int endgame;
     int enablemovement;
     int fogenable;
+    float fogposition;
 } Scene;
 
 /**

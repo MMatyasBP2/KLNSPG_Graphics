@@ -157,7 +157,6 @@ void handle_app_events(App* app)
                 if (app->scene.fogenable == 0)
                 {
                     glEnable(GL_FOG);
-                    glFogf(GL_FOG_DENSITY, 0.2);
                     app->scene.fogenable = 1;
                 }
                 else
@@ -165,6 +164,13 @@ void handle_app_events(App* app)
                     glDisable(GL_FOG);
                     app->scene.fogenable = 0;
                 }
+
+                app->scene.fogposition -= 0.2f; // Ez az érték állítja be, hogy milyen gyorsan mozog a köd lefelé (nagyobb érték)
+                GLfloat fogColor[] = {0.5f, 0.5f, 0.5f, 1.0f};
+                glFogfv(GL_FOG_COLOR, fogColor);
+                glFogi(GL_FOG_MODE, GL_LINEAR);
+                glFogf(GL_FOG_START, app->scene.fogposition);
+                glFogf(GL_FOG_END, app->scene.fogposition + 30.0f); // Az érték növelése nagyobb ködterületet eredményez
                 break;
             default:
                 break;

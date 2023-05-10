@@ -38,6 +38,7 @@ void init_scene(Scene* scene)
     scene->endgame = 0;
     scene->enablemovement = 1;
     scene->fogenable = 0;
+    scene->fogposition = 0.0f;
 }
 
 void set_lighting(float x)
