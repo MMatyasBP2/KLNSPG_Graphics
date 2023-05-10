@@ -42,11 +42,11 @@ void init_scene(Scene* scene)
     scene->fogdirection = 1.0f;
 }
 
-void set_lighting(float x)
+void set_lighting(float intensity)
 {
-    float ambient_light[] = { x, x, x, 1.0f };
-    float diffuse_light[] = { x, x, x, 1.0f };
-    float specular_light[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    float ambient_light[] = { 0.2f * intensity, 0.2f * intensity, 0.2f * intensity, 1.0f };
+    float diffuse_light[] = { 1.0f * intensity, 1.0f * intensity, 1.0f * intensity, 1.0f };
+    float specular_light[] = { 0.5f * intensity, 0.5f * intensity, 0.5f * intensity, 1.0f };
     float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
@@ -89,6 +89,9 @@ void update_scene(Scene* scene, double elapsed_time)
 
 void render_scene(const Scene* scene)
 {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
     // firsthouse
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
@@ -151,6 +154,9 @@ void render_scene(const Scene* scene)
 
     if (scene->endgame == 1)
         drawEnd(scene);
+
+    glDisable(GL_LIGHT0);
+    glDisable(GL_LIGHTING);
 }
 
 void help(Scene *scene)

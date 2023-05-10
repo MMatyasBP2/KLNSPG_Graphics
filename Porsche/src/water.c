@@ -35,14 +35,26 @@ void update_water(Water *water, double elapsed_time)
 void render_water(Water *water)
 {
     set_water_settings();
-    
+
     int x, y;
     glBegin(GL_QUADS);
     for (x = 0; x < 44; x++)
     {
         for (y = 0; y < 44; y++)
         {
-            glNormal3f(0, 0, 1);
+            // Normálvektorok kiszámítása
+            GLfloat nx = water->waterPoints[x + 1][y][2] - water->waterPoints[x][y][2];
+            GLfloat ny = water->waterPoints[x][y + 1][2] - water->waterPoints[x][y][2];
+            GLfloat nz = 1.0f;
+
+            // Normálvektor normalizálása
+            GLfloat len = sqrt(nx * nx + ny * ny + nz * nz);
+            nx /= len;
+            ny /= len;
+            nz /= len;
+
+            // Normálvektorok alkalmazása
+            glNormal3f(nx, ny, nz);
 
             glTexCoord2f(0.0f, 0.0f);
             glVertex3f(x - 22, y - 22, water->waterPoints[x][y][2]);
