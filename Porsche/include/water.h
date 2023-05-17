@@ -2,6 +2,7 @@
 #define WATER_H
 
 #include <GL/gl.h>
+#include "texture.h"
 
 typedef struct Water
 {

@@ -5,6 +5,7 @@
 #include <GL/gl.h>
 #include <obj/load.h>
 #include <obj/draw.h>
+#include "texture.h"
 
 typedef struct Car
 {

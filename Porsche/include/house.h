@@ -1,10 +1,11 @@
 #ifndef HOUSE_H
 #define HOUSE_H
 
-#include <obj/model.h>
 #include <GL/gl.h>
+#include <obj/model.h>
 #include <obj/load.h>
 #include <obj/draw.h>
+#include "texture.h"
 
 typedef struct House
 {
