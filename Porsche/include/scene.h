@@ -4,31 +4,25 @@
 #include "camera.h"
 #include "texture.h"
 #include "water.h"
+#include "skybox.h"
+#include "house.h"
+#include "car.h"
+#include "ground.h"
 #include <obj/model.h>
 #include <math.h>
 
 typedef struct Scene
 {
     Material material;
- 
-    Model firsthouse;
-    Model secondhouse;
-    Model thirdhouse;
-    Model fourthhouse;
-    GLuint house_texture_id;
- 
-    Model porsche;
-    GLuint porsche_texture_id;
 
-    Model ground;
-    GLuint ground_texture_id;
-    
+    Car car;
+    House house;
     Water water;
-    GLuint water_texture_id;
+    Ground ground;
+    Skybox skybox;
 
     float light;
     int showhelp;
-    float secondhousey;
     int endgame;
     int enablemovement;
     int fogenable;

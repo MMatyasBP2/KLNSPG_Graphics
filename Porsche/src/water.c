@@ -18,6 +18,8 @@ void init_water(Water *water)
     water->amplitude = 0.5f;
     water->frequency = 2.0f;
     water->delta = 0.0f;
+
+    water->water_texture_id = load_texture("assets/textures/water.jpg");
 }
 
 void update_water(Water *water, double elapsed_time)
@@ -34,9 +36,12 @@ void update_water(Water *water, double elapsed_time)
 
 void render_water(Water *water)
 {
-    set_water_settings();
-
     int x, y;
+
+    set_water_settings();
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, water->water_texture_id);
+    glTranslatef(0.0f, 0.0f, -0.5f);
     glBegin(GL_QUADS);
     for (x = 0; x < 44; x++)
     {
@@ -67,6 +72,8 @@ void render_water(Water *water)
         }
     }
     glEnd();
+
+    glPopMatrix();
 }
 
 void set_water_settings()

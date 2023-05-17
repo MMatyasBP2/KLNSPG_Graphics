@@ -6,19 +6,12 @@
 
 void init_scene(Scene* scene)
 {
-    load_model(&(scene->firsthouse), "assets/models/house.obj");
-    load_model(&(scene->secondhouse), "assets/models/house.obj");
-    load_model(&(scene->thirdhouse), "assets/models/house.obj");
-    load_model(&(scene->fourthhouse), "assets/models/house.obj");
-    load_model(&(scene->porsche), "assets/models/porsche.obj");
-    load_model(&(scene->ground), "assets/models/ground.obj");
-    scene->house_texture_id = load_texture("assets/textures/house.jpg");
-    scene->porsche_texture_id = load_texture("assets/textures/car.png");
-    scene->ground_texture_id = load_texture("assets/textures/ground.webp");
-    scene->water_texture_id = load_texture("assets/textures/water.jpg");
-
+    init_house(&(scene->house));
+    init_car(&(scene->car));
+    init_skybox(&(scene->skybox));
     init_water(&(scene->water));
-
+    init_ground(&(scene->ground));
+    
     scene->material.ambient.red = 0.0;
     scene->material.ambient.green = 0.0;
     scene->material.ambient.blue = 0.0;
@@ -33,7 +26,6 @@ void init_scene(Scene* scene)
 
     scene->material.shininess = 0.0;
     scene->light = 1.0f;
-    scene->secondhousey = -17.0f;
     scene->showhelp = 0;
     scene->endgame = 0;
     scene->enablemovement = 1;
@@ -89,65 +81,11 @@ void update_scene(Scene* scene, double elapsed_time)
 
 void render_scene(const Scene* scene)
 {
-    // firsthouse
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
-    glScalef(0.03f, 0.03f, 0.03f);
-    glRotated(90, 1, 0, 0);
-    glTranslatef(200.0f, -17.0f, -200.0f);
-    draw_model(&(scene->firsthouse));
-    glPopMatrix();
-
-    // secondhouse
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
-    glScalef(0.04f, 0.04f, 0.04f);
-    glRotated(90, 1, 0, 0);
-    glTranslatef(-100.0f, scene->secondhousey, 100.0f);
-    draw_model(&(scene->secondhouse));
-    glPopMatrix();
-
-    // thirdhouse
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
-    glScalef(0.03f, 0.03f, 0.03f);
-    glRotated(90, 1, 0, 0);
-    glTranslatef(200.0f, -17.0f, 100.0f);
-    draw_model(&(scene->thirdhouse));
-    glPopMatrix();
-
-    // fourthhouse
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->house_texture_id);
-    glScalef(0.03f, 0.03f, 0.03f);
-    glRotated(90, 1, 0, 0);
-    glTranslatef(-100.0f, -17.0f, -200.0f);
-    draw_model(&(scene->fourthhouse));
-    glPopMatrix();
-
-    // porsche
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->porsche_texture_id);
-    glScalef(0.7f, 0.7f, 0.7f);
-    glRotated(90.0f, 1.0f, 0.0f, 0.0f);
-    glTranslatef(-8.0f, 0.58f, 7.0f);
-    draw_model(&(scene->porsche));
-    glPopMatrix();
-
-    // ground
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->ground_texture_id);
-    glScalef(0.5, 0.5, 0.5);
-    glRotated(90, 1, 0, 0);
-    glTranslatef(0, 0, 0);
-    draw_model(&(scene->ground));
-    glPopMatrix();
-
-    glPushMatrix();
-    glBindTexture(GL_TEXTURE_2D, scene->water_texture_id);
-    glTranslatef(0.0f, 0.0f, -0.5f);
+    render_house(&(scene->house));
+    render_car(&(scene->car));
+    render_ground(&(scene->ground));
+    render_skybox(&(scene->skybox));
     render_water(&(scene->water));
-    glPopMatrix();
 
     if (scene->endgame == 1)
         drawEnd(scene);

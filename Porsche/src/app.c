@@ -290,14 +290,14 @@ void render_app(App* app)
     if (app->scene.showhelp == 1)
         help(&(app->scene));
 
-    if (app->house_state == HOUSE_MOVING_UP && app->scene.secondhousey < 100.0f)
-        app->scene.secondhousey += 0.1f;
+    if (app->house_state == HOUSE_MOVING_UP && app->scene.house.secondhousey < 100.0f)
+        app->scene.house.secondhousey += 0.1f;
     else if (app->house_state == HOUSE_MOVING_UP)
         app->house_state = HOUSE_STATIONARY;
     
 
-    if (app->house_state == HOUSE_MOVING_DOWN && app->scene.secondhousey > -17.0f)
-        app->scene.secondhousey -= 0.1f;
+    if (app->house_state == HOUSE_MOVING_DOWN && app->scene.house.secondhousey > -17.0f)
+        app->scene.house.secondhousey -= 0.1f;
     else if (app->house_state == HOUSE_MOVING_DOWN)
         app->house_state = HOUSE_STATIONARY;
 
