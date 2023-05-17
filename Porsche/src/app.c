@@ -167,9 +167,7 @@ void handle_app_events(App* app)
                 
                 app->scene.fogposition += 0.02f * app->scene.fogdirection;
                 if (app->scene.fogposition >= 20.0f || app->scene.fogposition <= -20.0f)
-                {
                     app->scene.fogdirection *= -1.0f;
-                }
 
                 GLfloat fogColor[] = {0.5f, 0.5f, 0.5f, 1.0f};
                 glFogfv(GL_FOG_COLOR, fogColor);
@@ -308,13 +306,11 @@ void render_app(App* app)
 
 void destroy_app(App* app)
 {
-    if (app->gl_context != NULL) {
+    if (app->gl_context != NULL)
         SDL_GL_DeleteContext(app->gl_context);
-    }
 
-    if (app->window != NULL) {
+    if (app->window != NULL)
         SDL_DestroyWindow(app->window);
-    }
 
     SDL_Quit();
 }
