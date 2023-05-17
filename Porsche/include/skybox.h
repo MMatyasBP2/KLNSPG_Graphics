@@ -10,14 +10,7 @@ typedef struct Skybox {
     GLuint skybox;
 } Skybox;
  
-/**
- * Initialize the skybox.
-*/
 void init_skybox(Skybox* skybox);
- 
-/**
- * Render the skybox.
-*/
 void render_skybox(const Skybox *skybox);
  
  
