@@ -6,6 +6,7 @@
 #include <obj/load.h>
 #include <obj/draw.h>
 #include "texture.h"
+#include "utils.h"
 
 typedef struct House
 {
@@ -13,8 +14,18 @@ typedef struct House
     Model secondhouse;
     Model thirdhouse;
     Model fourthhouse;
+    
+    vec3 v_firsthouse_trans;
+    vec3 v_secondhouse_trans;
+    vec3 v_thirdhouse_trans;
+    vec3 v_fourthhouse_trans;
+
+    vec3 v_firsthouse_scale;
+    vec3 v_secondhouse_scale;
+    vec3 v_thirdhouse_scale;
+    vec3 v_fourthhouse_scale;
+
     GLuint house_texture_id;
-    float secondhousey;
 } House;
 
 void init_house(House* house);
