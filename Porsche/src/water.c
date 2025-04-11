@@ -19,19 +19,74 @@ void init_water(Water *water)
     water->frequency = 2.0f;
     water->delta = 0.0f;
 
-    water->water_texture_id = load_texture("assets/textures/water.jpg");
+    for (int i = 0; i < MAX_VORTICES; i++)
+    {
+        water->vortices[i].x = 22.0f;
+        water->vortices[i].y = 22.0f;
+        water->vortices[i].phase = i * 1.0f;
+    }
+
+    water->water_texture_id = load_texture(WATER_TEXTURE_PATH);
 }
 
 void update_water(Water *water, double elapsed_time)
 {
-    water->delta += water->frequency * (float)elapsed_time;
+    water->delta += elapsed_time * 0.5f;
+
+    float center_x = 22.0f;
+    float center_y = 22.0f;
+    
+    for (int i = 0; i < MAX_VORTICES; i++)
+    {
+        water->vortices[i].x = center_x + 10.0f * sin(water->delta * 0.3f + water->vortices[i].phase);
+        water->vortices[i].y = center_y + 10.0f * cos(water->delta * 0.2f + water->vortices[i].phase);
+    }
 
     int x, y;
     for (x = 0; x < 45; x++)
     {
         for (y = 0; y < 45; y++)
-            water->waterPoints[x][y][2] = water->amplitude * sin((x / 5.0f) * 2.0f * M_PI + water->delta);
+        {
+            float wave_phase = (float)y / 45.0f * 2.0f * M_PI;
+            float t = fmod(water->delta * 0.2f + wave_phase, 1.0f);
+
+            float p0 = 0.0f;
+            float p1 = 0.8f * sin(wave_phase + water->delta);
+            float p2 = 0.8f * cos(wave_phase - water->delta);
+            float p3 = 0.0f;
+
+            float wave_height = de_casteljau(t, p0, p1, p2, p3) * water->amplitude * 2.0f;
+
+            float vortex_effect = 0.0f;
+
+            for (int i = 0; i < MAX_VORTICES; i++)
+            {
+                float dx = x - water->vortices[i].x;
+                float dy = y - water->vortices[i].y;
+                float dist = sqrt(dx * dx + dy * dy) / 5.0f;
+
+                if (dist < 1.0f)
+                {
+                    float swirl = sin(water->delta * 4.0f + dist * 12.0f + water->vortices[i].phase);
+                    vortex_effect += (1.0f - dist) * swirl * 1.2f;
+                }
+            }
+
+            water->waterPoints[x][y][2] = wave_height + vortex_effect;
+        }
     }
+}
+
+float de_casteljau(float t, float p0, float p1, float p2, float p3)
+{
+    float q0 = (1 - t) * p0 + t * p1;
+    float q1 = (1 - t) * p1 + t * p2;
+    float q2 = (1 - t) * p2 + t * p3;
+
+    float r0 = (1 - t) * q0 + t * q1;
+    float r1 = (1 - t) * q1 + t * q2;
+
+    return (1 - t) * r0 + t * r1;
 }
 
 void render_water(Water *water)
@@ -41,7 +96,10 @@ void render_water(Water *water)
     set_water_settings();
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, water->water_texture_id);
-    glTranslatef(0.0f, 0.0f, -0.5f);
+    glTranslatef(38.0f, 0.0f, -0.5f);
+
+    float tex_offset = fmod(water->delta * 0.05f, 1.0f);
+
     glBegin(GL_QUADS);
     for (x = 0; x < 44; x++)
     {
@@ -52,27 +110,23 @@ void render_water(Water *water)
             GLfloat nz = 1.0f;
 
             GLfloat len = sqrt(nx * nx + ny * ny + nz * nz);
-            nx /= len;
-            ny /= len;
-            nz /= len;
-            
+            nx /= len; ny /= len; nz /= len;
             glNormal3f(nx, ny, nz);
 
-            glTexCoord2f(0.0f, 0.0f);
+            glTexCoord2f((x + tex_offset) / 45.0f, (y + tex_offset) / 45.0f);
             glVertex3f(x - 22, y - 22, water->waterPoints[x][y][2]);
 
-            glTexCoord2f(1.0f, 0.0f);
+            glTexCoord2f((x + 1 + tex_offset) / 45.0f, (y + tex_offset) / 45.0f);
             glVertex3f(x + 1 - 22, y - 22, water->waterPoints[x + 1][y][2]);
 
-            glTexCoord2f(1.0f, 1.0f);
+            glTexCoord2f((x + 1 + tex_offset) / 45.0f, (y + 1 + tex_offset) / 45.0f);
             glVertex3f(x + 1 - 22, y + 1 - 22, water->waterPoints[x + 1][y + 1][2]);
 
-            glTexCoord2f(0.0f, 1.0f);
+            glTexCoord2f((x + tex_offset) / 45.0f, (y + 1 + tex_offset) / 45.0f);
             glVertex3f(x - 22, y + 1 - 22, water->waterPoints[x][y + 1][2]);
         }
     }
     glEnd();
-
     glPopMatrix();
 }
 
