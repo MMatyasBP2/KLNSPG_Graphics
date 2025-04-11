@@ -15,7 +15,7 @@ void init_water(Water *water)
         }
     }
 
-    water->amplitude = 0.5f;
+    water->amplitude = 1.0f;
     water->frequency = 2.0f;
     water->delta = 0.0f;
 
@@ -96,7 +96,7 @@ void render_water(Water *water)
     set_water_settings();
     glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, water->water_texture_id);
-    glTranslatef(38.0f, 0.0f, -0.5f);
+    glTranslatef(38.0f, 0.0f, -1.5f);
 
     float tex_offset = fmod(water->delta * 0.05f, 1.0f);
 
