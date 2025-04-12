@@ -137,7 +137,13 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_SPACE:
                 if (app->scene.enablemovement == 1 && !app->is_flying) {
-                    set_camera_vertical_speed(&(app->camera), 1.0);  // Repülés indítása
+                    set_camera_vertical_speed(&(app->camera), 1.0);  // Repülés felfelé
+                    app->is_flying = true;  // Repülés aktiválása
+                }
+                break;
+            case SDL_SCANCODE_X:
+                if (app->scene.enablemovement == 1 && !app->is_flying) {
+                    set_camera_vertical_speed(&(app->camera), -1.0);
                     app->is_flying = true;  // Repülés aktiválása
                 }
                 break;
@@ -197,7 +203,15 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_SPACE:
                 set_camera_vertical_speed(&(app->camera), 0.0);  // Repülés leállítása
-                app->is_flying = false;  // Repülés leállítása
+                if (app->is_flying) {
+                    app->is_flying = false;  // Repülés deaktiválása
+                }
+                break;
+            case SDL_SCANCODE_X:
+                set_camera_vertical_speed(&(app->camera), 0.0);  // Repülés leállítása, ha elengeded az X-et
+                if (app->is_flying) {
+                    app->is_flying = false;  // Vissza a normál mozgásra
+                }
                 break;
             default:
                 break;
@@ -242,11 +256,11 @@ void update_app(App* app)
     update_scene(&(app->scene), elapsed_time);
     update_water(&(app->water), elapsed_time);
 
-    if ((app->camera.position.x < -17.662912) || (app->camera.position.x > 17.487240))
-        app->camera.position.x -= 0.2;
+    if (app->camera.position.z < 0.5)
+        app->camera.position.z = 1.0;
 
     if ((app->camera.position.y < -17.662912) || (app->camera.position.y > 17.662912))
-        app->camera.position.y -= 0.2;
+        app->camera.position.z -= 0.2;
 
     if (calc_collision(&(app->camera), 5.223761, -3.462567, 2.5, 2.5) == 1)
     {
