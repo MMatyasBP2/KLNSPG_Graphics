@@ -4,7 +4,7 @@
 #include <GL/gl.h>
 #include "texture.h"
 
-#define MAX_VORTICES 10
+#define MAX_VORTICES 1
 #define WATER_TEXTURE_PATH "assets/textures/water.jpg"
 
 typedef struct Vortex {

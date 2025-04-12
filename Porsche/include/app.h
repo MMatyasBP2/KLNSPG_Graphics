@@ -28,6 +28,7 @@ typedef struct App
     Scene scene;
     Water water;
     HouseState house_state;
+    bool is_flying;
 } App;
 
 /**

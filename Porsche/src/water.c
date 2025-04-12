@@ -4,11 +4,8 @@
 
 void init_water(Water *water)
 {
-    int x, y;
-    for (x = 0; x < 45; x++)
-    {
-        for (y = 0; y < 45; y++)
-        {
+    for (int x = 0; x < 45; x++) {
+        for (int y = 0; y < 45; y++) {
             water->waterPoints[x][y][0] = x - 22;
             water->waterPoints[x][y][1] = y - 22;
             water->waterPoints[x][y][2] = 0;
@@ -19,11 +16,14 @@ void init_water(Water *water)
     water->frequency = 2.0f;
     water->delta = 0.0f;
 
-    for (int i = 0; i < MAX_VORTICES; i++)
-    {
-        water->vortices[i].x = 22.0f;
-        water->vortices[i].y = 22.0f;
-        water->vortices[i].phase = i * 1.0f;
+    // Egyetlen örvény középen
+    water->vortices[0].x = 22.0f;
+    water->vortices[0].y = 22.0f;
+    water->vortices[0].phase = 0.0f;
+
+    // A többi nem aktív
+    for (int i = 1; i < MAX_VORTICES; i++) {
+        water->vortices[i].x = -100.0f; // messzire tesszük
     }
 
     water->water_texture_id = load_texture(WATER_TEXTURE_PATH);
@@ -35,17 +35,14 @@ void update_water(Water *water, double elapsed_time)
 
     float center_x = 22.0f;
     float center_y = 22.0f;
-    
-    for (int i = 0; i < MAX_VORTICES; i++)
-    {
-        water->vortices[i].x = center_x + 10.0f * sin(water->delta * 0.3f + water->vortices[i].phase);
-        water->vortices[i].y = center_y + 10.0f * cos(water->delta * 0.2f + water->vortices[i].phase);
-    }
 
-    int x, y;
-    for (x = 0; x < 45; x++)
+    // Csak az első örvényt használjuk, középen
+    water->vortices[0].x = center_x;
+    water->vortices[0].y = center_y;
+
+    for (int x = 0; x < 45; x++)
     {
-        for (y = 0; y < 45; y++)
+        for (int y = 0; y < 45; y++)
         {
             float wave_phase = (float)y / 45.0f * 2.0f * M_PI;
             float t = fmod(water->delta * 0.2f + wave_phase, 1.0f);
@@ -59,19 +56,37 @@ void update_water(Water *water, double elapsed_time)
 
             float vortex_effect = 0.0f;
 
-            for (int i = 0; i < MAX_VORTICES; i++)
+            // Egyetlen központi örvény hatása
+            for (int i = 0; i < 1; i++)
             {
                 float dx = x - water->vortices[i].x;
                 float dy = y - water->vortices[i].y;
-                float dist = sqrt(dx * dx + dy * dy) / 5.0f;
+                float radius = sqrtf(dx * dx + dy * dy);
 
-                if (dist < 1.0f)
+                if (radius < 20.0f)
                 {
-                    float swirl = sin(water->delta * 4.0f + dist * 12.0f + water->vortices[i].phase);
-                    vortex_effect += (1.0f - dist) * swirl * 1.2f;
+                    float angle = atan2f(dy, dx);
+
+                    // Spirális örvénylés hullámzása
+                    float swirl = sinf(water->delta * 1.5f + angle * 4.0f + radius * 0.5f);
+
+                    // Sima lecsengés a sugár mentén
+                    float falloff = 1.0f / (1.0f + radius * 0.3f);
+
+                    // Spirál hullám hatása
+                    vortex_effect += swirl * falloff * 2.5f;
+
+                    // Lehúzó hatás a középpontban
+                    if (radius < 5.0f)
+                    {
+                        float depth = -cosf(radius * 1.2f - water->delta * 1.0f);
+                        float depth_fade = 1.0f - (radius / 5.0f);
+                        vortex_effect += depth * depth_fade * 3.5f;
+                    }
                 }
             }
 
+            // Összegzés: hullámzás + örvényhatás
             water->waterPoints[x][y][2] = wave_height + vortex_effect;
         }
     }

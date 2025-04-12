@@ -135,6 +135,12 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_KP_MINUS:
                 app->scene.light -= 0.1f;
                 break;
+            case SDL_SCANCODE_SPACE:
+                if (app->scene.enablemovement == 1 && !app->is_flying) {
+                    set_camera_vertical_speed(&(app->camera), 1.0);  // Repülés indítása
+                    app->is_flying = true;  // Repülés aktiválása
+                }
+                break;
             case SDL_SCANCODE_F1:
                 if (app->scene.showhelp == 0)
                     app->scene.showhelp = 1;
@@ -164,7 +170,7 @@ void handle_app_events(App* app)
                     glDisable(GL_FOG);
                     app->scene.fogenable = 0;
                 }
-                
+
                 app->scene.fogposition += 0.02f * app->scene.fogdirection;
                 if (app->scene.fogposition >= 20.0f || app->scene.fogposition <= -20.0f)
                     app->scene.fogdirection *= -1.0f;
@@ -188,6 +194,10 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), 0);
+                break;
+            case SDL_SCANCODE_SPACE:
+                set_camera_vertical_speed(&(app->camera), 0.0);  // Repülés leállítása
+                app->is_flying = false;  // Repülés leállítása
                 break;
             default:
                 break;
