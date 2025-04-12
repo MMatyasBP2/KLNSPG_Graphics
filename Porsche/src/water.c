@@ -4,11 +4,11 @@
 
 void init_water(Water *water)
 {
-    for (int x = 0; x < 45; x++) {
-        for (int y = 0; y < 45; y++) {
-            water->waterPoints[x][y][0] = x - 22;
-            water->waterPoints[x][y][1] = y - 22;
-            water->waterPoints[x][y][2] = 0;
+    for (int x = 0; x < WATER_GRID_SIZE; x++) {
+        for (int y = 0; y < WATER_GRID_SIZE; y++) {
+            water->waterPoints[x][y][0] = x - WATER_GRID_SIZE / 2;
+            water->waterPoints[x][y][1] = y - WATER_GRID_SIZE / 2;
+            water->waterPoints[x][y][2] = 0.0f;
         }
     }
 
@@ -16,8 +16,8 @@ void init_water(Water *water)
     water->frequency = 2.0f;
     water->delta = 0.0f;
 
-    water->vortices[0].x = 22.0f;
-    water->vortices[0].y = 22.0f;
+    water->vortices[0].x = WATER_GRID_SIZE / 2.0f;
+    water->vortices[0].y = WATER_GRID_SIZE / 2.0f;
     water->vortices[0].phase = 0.0f;
 
     for (int i = 1; i < MAX_VORTICES; i++) {
@@ -31,17 +31,17 @@ void update_water(Water *water, double elapsed_time)
 {
     water->delta += elapsed_time * 0.5f;
 
-    float center_x = 22.0f;
-    float center_y = 22.0f;
+    float center_x = WATER_GRID_SIZE / 2.0f;
+    float center_y = WATER_GRID_SIZE / 2.0f;
 
     water->vortices[0].x = center_x;
     water->vortices[0].y = center_y;
 
-    for (int x = 0; x < 45; x++)
+    for (int x = 0; x < WATER_GRID_SIZE; x++)
     {
-        for (int y = 0; y < 45; y++)
+        for (int y = 0; y < WATER_GRID_SIZE; y++)
         {
-            float wave_phase = (float)y / 45.0f * 2.0f * M_PI;
+            float wave_phase = (float)y / WATER_GRID_SIZE * 2.0f * M_PI;
             float t = fmod(water->delta * 0.2f + wave_phase, 1.0f);
 
             float p0 = 0.0f;
@@ -53,7 +53,7 @@ void update_water(Water *water, double elapsed_time)
 
             float vortex_effect = 0.0f;
 
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < MAX_VORTICES; i++)
             {
                 float dx = x - water->vortices[i].x;
                 float dy = y - water->vortices[i].y;
@@ -80,18 +80,6 @@ void update_water(Water *water, double elapsed_time)
     }
 }
 
-float de_casteljau(float t, float p0, float p1, float p2, float p3)
-{
-    float q0 = (1 - t) * p0 + t * p1;
-    float q1 = (1 - t) * p1 + t * p2;
-    float q2 = (1 - t) * p2 + t * p3;
-
-    float r0 = (1 - t) * q0 + t * q1;
-    float r1 = (1 - t) * q1 + t * q2;
-
-    return (1 - t) * r0 + t * r1;
-}
-
 void render_water(Water *water)
 {
     int x, y;
@@ -104,9 +92,9 @@ void render_water(Water *water)
     float tex_offset = fmod(water->delta * 0.05f, 1.0f);
 
     glBegin(GL_QUADS);
-    for (x = 0; x < 44; x++)
+    for (x = 0; x < WATER_GRID_SIZE - 1; x++)
     {
-        for (y = 0; y < 44; y++)
+        for (y = 0; y < WATER_GRID_SIZE - 1; y++)
         {
             GLfloat nx = water->waterPoints[x + 1][y][2] - water->waterPoints[x][y][2];
             GLfloat ny = water->waterPoints[x][y + 1][2] - water->waterPoints[x][y][2];
@@ -116,21 +104,33 @@ void render_water(Water *water)
             nx /= len; ny /= len; nz /= len;
             glNormal3f(nx, ny, nz);
 
-            glTexCoord2f((x + tex_offset) / 45.0f, (y + tex_offset) / 45.0f);
-            glVertex3f(x - 22, y - 22, water->waterPoints[x][y][2]);
+            glTexCoord2f((x + tex_offset) / WATER_GRID_SIZE, (y + tex_offset) / WATER_GRID_SIZE);
+            glVertex3f(x - WATER_GRID_SIZE / 2, y - WATER_GRID_SIZE / 2, water->waterPoints[x][y][2]);
 
-            glTexCoord2f((x + 1 + tex_offset) / 45.0f, (y + tex_offset) / 45.0f);
-            glVertex3f(x + 1 - 22, y - 22, water->waterPoints[x + 1][y][2]);
+            glTexCoord2f((x + 1 + tex_offset) / WATER_GRID_SIZE, (y + tex_offset) / WATER_GRID_SIZE);
+            glVertex3f(x + 1 - WATER_GRID_SIZE / 2, y - WATER_GRID_SIZE / 2, water->waterPoints[x + 1][y][2]);
 
-            glTexCoord2f((x + 1 + tex_offset) / 45.0f, (y + 1 + tex_offset) / 45.0f);
-            glVertex3f(x + 1 - 22, y + 1 - 22, water->waterPoints[x + 1][y + 1][2]);
+            glTexCoord2f((x + 1 + tex_offset) / WATER_GRID_SIZE, (y + 1 + tex_offset) / WATER_GRID_SIZE);
+            glVertex3f(x + 1 - WATER_GRID_SIZE / 2, y + 1 - WATER_GRID_SIZE / 2, water->waterPoints[x + 1][y + 1][2]);
 
-            glTexCoord2f((x + tex_offset) / 45.0f, (y + 1 + tex_offset) / 45.0f);
-            glVertex3f(x - 22, y + 1 - 22, water->waterPoints[x][y + 1][2]);
+            glTexCoord2f((x + tex_offset) / WATER_GRID_SIZE, (y + 1 + tex_offset) / WATER_GRID_SIZE);
+            glVertex3f(x - WATER_GRID_SIZE / 2, y + 1 - WATER_GRID_SIZE / 2, water->waterPoints[x][y + 1][2]);
         }
     }
     glEnd();
     glPopMatrix();
+}
+
+float de_casteljau(float t, float p0, float p1, float p2, float p3)
+{
+    float q0 = (1 - t) * p0 + t * p1;
+    float q1 = (1 - t) * p1 + t * p2;
+    float q2 = (1 - t) * p2 + t * p3;
+
+    float r0 = (1 - t) * q0 + t * q1;
+    float r1 = (1 - t) * q1 + t * q2;
+
+    return (1 - t) * r0 + t * r1;
 }
 
 void set_water_settings()

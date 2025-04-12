@@ -137,14 +137,14 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_SPACE:
                 if (app->scene.enablemovement == 1 && !app->is_flying) {
-                    set_camera_vertical_speed(&(app->camera), 1.0);  // Repülés felfelé
-                    app->is_flying = true;  // Repülés aktiválása
+                    set_camera_vertical_speed(&(app->camera), 1.0);
+                    app->is_flying = true;
                 }
                 break;
             case SDL_SCANCODE_X:
                 if (app->scene.enablemovement == 1 && !app->is_flying) {
                     set_camera_vertical_speed(&(app->camera), -1.0);
-                    app->is_flying = true;  // Repülés aktiválása
+                    app->is_flying = true;
                 }
                 break;
             case SDL_SCANCODE_F1:
@@ -202,15 +202,15 @@ void handle_app_events(App* app)
                 set_camera_side_speed(&(app->camera), 0);
                 break;
             case SDL_SCANCODE_SPACE:
-                set_camera_vertical_speed(&(app->camera), 0.0);  // Repülés leállítása
+                set_camera_vertical_speed(&(app->camera), 0.0);
                 if (app->is_flying) {
-                    app->is_flying = false;  // Repülés deaktiválása
+                    app->is_flying = false;
                 }
                 break;
             case SDL_SCANCODE_X:
-                set_camera_vertical_speed(&(app->camera), 0.0);  // Repülés leállítása, ha elengeded az X-et
+                set_camera_vertical_speed(&(app->camera), 0.0);
                 if (app->is_flying) {
-                    app->is_flying = false;  // Vissza a normál mozgásra
+                    app->is_flying = false;
                 }
                 break;
             default:

@@ -5,6 +5,7 @@
 #include "texture.h"
 
 #define MAX_VORTICES 1
+#define WATER_GRID_SIZE 250
 #define WATER_TEXTURE_PATH "assets/textures/water.jpg"
 
 typedef struct Vortex {
@@ -13,7 +14,7 @@ typedef struct Vortex {
 } Vortex;
 
 typedef struct Water {
-    float waterPoints[45][45][3];
+    float waterPoints[WATER_GRID_SIZE][WATER_GRID_SIZE][3];
     float amplitude;
     float frequency;
     float delta;
